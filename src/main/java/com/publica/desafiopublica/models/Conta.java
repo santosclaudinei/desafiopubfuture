@@ -1,5 +1,7 @@
 package com.publica.desafiopublica.models;
 
+import com.publica.desafiopublica.enums.TipoConta;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,22 +9,15 @@ import javax.persistence.*;
 public class Conta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public double saldo;
-    public String tipoConta;
-    public String instituicaoFinanceira;
+    private double saldo;
 
-    public Conta() {
-    }
+    @Enumerated(EnumType.STRING)
+    private TipoConta tipoConta;
+    private String instituicaoFinanceira;
 
-    public Conta(double saldo, String tipoConta, String instituicaoFinanceira) {
-        this.saldo = saldo;
-        this.tipoConta = tipoConta;
-        this.instituicaoFinanceira = instituicaoFinanceira;
-    }
 
     public Long getId() {
         return id;
@@ -40,11 +35,11 @@ public class Conta {
         this.saldo = saldo;
     }
 
-    public String getTipoConta() {
+    public TipoConta getTipoConta() {
         return tipoConta;
     }
 
-    public void setTipoConta(String tipoConta) {
+    public void setTipoConta(TipoConta tipoConta) {
         this.tipoConta = tipoConta;
     }
 
