@@ -10,7 +10,7 @@ public interface DespesaRepository extends JpaRepository<Despesa, Long> {
 
     Despesa findById(long id);
 
-    @Query(value = "SELECT sum(c.valor) FROM TB_DESPESAS c ", nativeQuery = true)
+    @Query(value = "SELECT sum(d.valor) FROM TB_DESPESAS d ", nativeQuery = true)
     Double valorTotalDespesas();
 
 }

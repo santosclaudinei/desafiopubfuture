@@ -1,5 +1,6 @@
 package com.publica.desafiopublica.services;
 
+import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Conta;
 import com.publica.desafiopublica.repository.ContaRepository;
 import org.springframework.beans.BeanUtils;
@@ -24,9 +25,14 @@ public class ContaService {
 
     public Conta listaContaPorId(long id) {
         return contaRepository.findById(id);
+
     }
 
-    public Conta AtualizaConta(Long id, Conta conta) {
+    public Double exibeSaldoTotal() {
+        return contaRepository.valorTotalContas();
+    }
+
+    public Conta atualizaConta(Long id, Conta conta) {
         var contaEncontrada = listaContaPorId(id);
         BeanUtils.copyProperties(conta, contaEncontrada, "id");
         return contaRepository.save(contaEncontrada);
@@ -34,6 +40,30 @@ public class ContaService {
 
     public void deletaConta(Long id) {
         contaRepository.deleteById(id);
+    }
+
+
+    public Conta sacar(double valor, Conta contaOrigem) {
+        try{
+            if (contaOrigem.getSaldo() >= valor) {
+                var novoSaldoOrigem = contaOrigem.getSaldo() - valor;
+                contaOrigem.setSaldo(novoSaldoOrigem);
+            }
+        } catch (EntidadeNaoEncontradaException e){
+            // COMPLETAR CÓDIGO
+        }
+        return contaOrigem;
+    }
+
+    public void depositar(double valor, Conta contaDestino) {
+        var novoSaldoDestino = contaDestino.getSaldo() + valor;
+        contaDestino.setSaldo(novoSaldoDestino);
+    }
+
+    public Conta transferir(double valor, Conta contaDestino, Conta contaOrigem) {
+        sacar(valor, contaOrigem);
+        depositar(valor, contaDestino);
+        return contaDestino;
     }
 
 }

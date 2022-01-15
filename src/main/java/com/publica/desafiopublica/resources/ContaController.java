@@ -33,10 +33,22 @@ public class ContaController {
         return contaService.listaContaPorId(id);
     }
 
+    @GetMapping("/total")
+    @ResponseStatus(HttpStatus.OK)
+    public String ListaSaldoTotal() {
+        return ("Saldo total R$ " + contaService.exibeSaldoTotal());
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Conta AtualizaConta(@PathVariable("id") Long id, @RequestBody Conta conta) {
-        return contaService.AtualizaConta(id, conta);
+        return contaService.atualizaConta(id, conta);
+    }
+
+    @PutMapping("/saldo")
+    @ResponseStatus(HttpStatus.OK)
+    public Conta transfereValores(Double valor, Conta contaOrigem, Conta contaDestino) {
+        return contaService.transferir(valor, contaOrigem, contaDestino);
     }
 
     @DeleteMapping("/{id}")

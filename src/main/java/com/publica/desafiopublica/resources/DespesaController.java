@@ -41,8 +41,8 @@ public class DespesaController {
 
     @GetMapping("/total")
     @ResponseStatus(HttpStatus.OK)
-    public String listaTotalDespesas() {
-        return ("R$ " + despesaService.listaTotalDespesas());
+    public String listaDespesaTotal() {
+        return ("Total das despesa R$ " + despesaService.exibeDespesaTotal());
     }
 
     @PutMapping("/{id}")

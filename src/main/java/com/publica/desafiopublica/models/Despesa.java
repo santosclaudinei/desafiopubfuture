@@ -1,36 +1,36 @@
 package com.publica.desafiopublica.models;
 
+import com.publica.desafiopublica.enums.TipoDespesa;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "TB_DESPESAS")
-public class Despesa implements Serializable {
+public class Despesa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    public double valor;
+    private double valor;
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dataPagamento;
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dataPagamentoEsperado;
-    private String tipoDespesa;
+    private TipoDespesa tipoDespesa;
     @ManyToOne
-    public Conta conta;
+    private Conta conta;
 
     public Despesa() {
     }
 
     public Despesa(double valor, Date dataPagamento, Date dataPagamentoEsperado,
-                   String tipoDespesa, Conta conta) {
+                   TipoDespesa tipoDespesa, Conta conta) {
         this.valor = valor;
         this.dataPagamento = dataPagamento;
         this.dataPagamentoEsperado = dataPagamentoEsperado;
@@ -70,11 +70,11 @@ public class Despesa implements Serializable {
         this.dataPagamentoEsperado = dataPagamentoEsperado;
     }
 
-    public String getTipoDespesa() {
+    public TipoDespesa getTipoDespesa() {
         return tipoDespesa;
     }
 
-    public void setTipoDespesa(String tipoDespesa) {
+    public void setTipoDespesa(TipoDespesa tipoDespesa) {
         this.tipoDespesa = tipoDespesa;
     }
 

@@ -20,20 +20,20 @@ public class DespesaService {
         return despesaRepository.save(despesa);
     }
 
+    public Despesa listaDespesaPorId(long id) {
+        return despesaRepository.findById(id);
+    }
+
     public List<Despesa> listaDespesaPorData() {
-        return despesaRepository.findAll(Sort.by(Sort.Direction.ASC, "dataPagamentoEsperado"));
+        return despesaRepository.findAll(Sort.by(Sort.Direction.ASC, "dataPagamento"));
     }
 
     public List<Despesa> listaDespesaPorTipo() {
         return despesaRepository.findAll(Sort.by(Sort.Direction.ASC, "tipoDespesa"));
     }
 
-    public Double listaTotalDespesas( ) {
+    public Double exibeDespesaTotal( ) {
         return despesaRepository.valorTotalDespesas();
-    }
-
-    public Despesa listaDespesaPorId(long id) {
-        return despesaRepository.findById(id);
     }
 
     public Despesa atualizaDespesa(Long id, Despesa despesa) {
