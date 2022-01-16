@@ -1,10 +1,11 @@
 package com.publica.desafiopublica.services;
 
-import com.publica.desafiopublica.models.Despesa;
+import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Receita;
 import com.publica.desafiopublica.repository.ReceitaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,11 @@ public class ReceitaService {
     }
 
     public Receita listaReceitaPorId(long id) {
-        return receitaRepository.findById(id);
+        var receitaEncontrada = receitaRepository.findById(id);
+        if (receitaEncontrada == null) {
+            throw new EntidadeNaoEncontradaException(String.format("Receita de código %d não encontrada.", id));
+        }
+        return receitaEncontrada;
     }
 
     public List<Receita> listaReceitaPorData() {
@@ -44,7 +49,13 @@ public class ReceitaService {
     }
 
     public void deletaReceita(Long id) {
-        receitaRepository.deleteById(id);
+
+        try {
+            receitaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(String.format("Receita de código %d não encontrada.", id));
+        }
+
     }
 
 }

@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  postgres-financ:
+    container_name: postgres-financ-api
+    image: postgres:12.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Severus@0504
+      POSTGRES_DB: banco_publica
+    ports:
+      - "5432:5432"

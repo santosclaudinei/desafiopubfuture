@@ -1,15 +1,22 @@
 package com.publica.desafiopublica.resources;
 
+import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Conta;
+import com.publica.desafiopublica.models.DadosTransferencia;
 import com.publica.desafiopublica.services.ContaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value="/conta")
+@Api(value = "API REST Gestão Financeira")
+@CrossOrigin(origins = "*")
 public class ContaController {
 
     @Autowired
@@ -17,44 +24,65 @@ public class ContaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Cria uma conta")
     public Conta salvaConta(@RequestBody Conta conta) {
         return contaService.salvaConta(conta);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<Conta> listaContas() {
-        return (List<Conta>) contaService.listaContas();
+    @ApiOperation(value = "Lista todas as contas")
+    public ResponseEntity <List<Conta>> listaContas() {
+        var contas = (List<Conta>) contaService.listaContas();
+        return ResponseEntity.ok(contas);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Conta listaContaPorId(@PathVariable(value="id") long id) {
-        return contaService.listaContaPorId(id);
+    @ApiOperation(value = "Lista uma conta através de um ID informado")
+    public ResponseEntity<?> listaContaPorId(@PathVariable(value="id") long id) {
+        try {
+            var contaEncontrada = contaService.listaContaPorId(id);
+            return ResponseEntity.ok().body(contaEncontrada);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/total")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Mostra o saldo total das contas")
     public String ListaSaldoTotal() {
         return ("Saldo total R$ " + contaService.exibeSaldoTotal());
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Conta AtualizaConta(@PathVariable("id") Long id, @RequestBody Conta conta) {
-        return contaService.atualizaConta(id, conta);
+    @ApiOperation(value = "Atualiza uma conta através de um ID informado")
+    public ResponseEntity<?> atualizaconta(@PathVariable("id") Long id, @RequestBody Conta conta) {
+        try {
+            var contaAtualizada = contaService.atualizaConta(id, conta);
+            return ResponseEntity.status(HttpStatus.OK).body(contaAtualizada);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
-    @PutMapping("/saldo")
+    @PostMapping("/transferencia")
     @ResponseStatus(HttpStatus.OK)
-    public Conta transfereValores(Double valor, Conta contaOrigem, Conta contaDestino) {
-        return contaService.transferir(valor, contaOrigem, contaDestino);
+    @ApiOperation(value = "Realiza transferência entre duas contas")
+    public String transfereValores(@RequestBody DadosTransferencia dadosTransferencia) {
+        return contaService.transferir(dadosTransferencia);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletaConta(@PathVariable("id") Long id) {
-        contaService.deletaConta(id);
+    @ApiOperation(value = "Deleta uma contra através de um ID informado")
+    public ResponseEntity<?> deletaConta(@PathVariable("id") Long id) {
+
+        try {
+            contaService.deletaConta(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

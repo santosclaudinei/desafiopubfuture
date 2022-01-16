@@ -1,27 +1,19 @@
 package com.publica.desafiopublica.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
 public enum TipoReceita {
 
     @JsonProperty("Salario")
-    SALARIO("Salário"),
+    SALARIO,
 
     @JsonProperty("Presente")
-    PRESENTE("Presente"),
+    PRESENTE,
 
     @JsonProperty("Premio")
-    PREMIO("Prêmio"),
+    PREMIO,
 
     @JsonProperty("Outros")
-    OUTROS("Outros");
-
-    @Getter
-    private final String value;
-
-    TipoReceita(String value) {
-        this.value = value;
-    }
+    OUTROS;
 
 }

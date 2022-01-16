@@ -1,9 +1,11 @@
 package com.publica.desafiopublica.services;
 
+import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Despesa;
 import com.publica.desafiopublica.repository.DespesaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,11 @@ public class DespesaService {
     }
 
     public Despesa listaDespesaPorId(long id) {
-        return despesaRepository.findById(id);
+        var despesaEncontrada = despesaRepository.findById(id);
+        if(despesaEncontrada == null) {
+            throw  new EntidadeNaoEncontradaException(String.format("Despesa de código %d não encontrada.", id));
+        }
+        return despesaEncontrada;
     }
 
     public List<Despesa> listaDespesaPorData() {
@@ -43,7 +49,13 @@ public class DespesaService {
     }
 
     public void deletaDespesa(Long id) {
-        despesaRepository.deleteById(id);
+
+        try {
+            despesaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(String.format("Despesa de código %d não encontrada.", id));
+        }
+
     }
 
 }

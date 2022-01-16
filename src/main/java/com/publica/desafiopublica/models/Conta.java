@@ -17,7 +17,7 @@ public class Conta {
     @Enumerated(EnumType.STRING)
     private TipoConta tipoConta;
     private String instituicaoFinanceira;
-
+    private String numeroConta;
 
     public Long getId() {
         return id;
@@ -49,6 +49,14 @@ public class Conta {
 
     public void setInstituicaoFinanceira(String instituicaoFinanceira) {
         this.instituicaoFinanceira = instituicaoFinanceira;
+    }
+
+    public String getNumeroConta() {
+        return numeroConta;
+    }
+
+    public void setNumeroConta(String numeroConta) {
+        this.numeroConta = numeroConta;
     }
 
 }

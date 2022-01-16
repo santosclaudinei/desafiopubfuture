@@ -1,39 +1,31 @@
 package com.publica.desafiopublica.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
 public enum TipoDespesa {
 
     @JsonProperty("Alimentacao")
-    ALIMENTACAO("Alimentação"),
+    ALIMENTACAO,
 
     @JsonProperty("Educacao")
-    EDUCACAO("Educação"),
+    EDUCACAO,
 
     @JsonProperty("Lazer")
-    LAZER("Lazer"),
+    LAZER,
 
     @JsonProperty("Moradia")
-    MORADIA("Moradia"),
+    MORADIA,
 
     @JsonProperty("Roupa")
-    ROUPA("Roupa"),
+    ROUPA,
 
     @JsonProperty("Saude")
-    SAUDE("Saúde"),
+    SAUDE,
 
     @JsonProperty("Trasnporte")
-    TRANSPORTE("Trasnporte"),
+    TRANSPORTE,
 
     @JsonProperty("Outros")
-    OUTROS("Outros");
-
-    @Getter
-    private final String value;
-
-    TipoDespesa(String value) {
-        this.value = value;
-    }
+    OUTROS;
 
 }

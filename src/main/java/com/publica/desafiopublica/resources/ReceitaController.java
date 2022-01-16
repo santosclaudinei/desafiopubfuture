@@ -1,9 +1,12 @@
 package com.publica.desafiopublica.resources;
 
+import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Receita;
 import com.publica.desafiopublica.services.ReceitaService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,39 +20,69 @@ public class ReceitaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Cria uma Receita")
     public Receita salvaReceita(@RequestBody Receita receita) {
         return receitaService.salvaReceita(receita);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Receita listaReceitaPorId(@PathVariable("id") Long id) {
-        return receitaService.listaReceitaPorId(id);
+    @ApiOperation(value = "Lista uma receita através de um ID informado")
+    public ResponseEntity<?> listaReceitaPorId(@PathVariable("id") Long id) {
+        try {
+            var receitaEncontrada = receitaService.listaReceitaPorId(id);
+            return ResponseEntity.ok().body(receitaEncontrada);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/data")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Receita> listaReceitaPorData() {
-        return receitaService.listaReceitaPorData();
+    @ApiOperation(value = "Lista todas as receitas por ordem ascedente baseado na data de pagamento")
+    public ResponseEntity <List<Receita>> listaReceitaPorData() {
+        var receitas = (List<Receita>) receitaService.listaReceitaPorData();
+        return ResponseEntity.ok(receitas);
     }
 
     @GetMapping("/tipo")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Receita> listaReceitaPorTipo() {
-        return receitaService.listaReceitaPorTipo();
+    @ApiOperation(value = "Lista todas as receitas por ordem ascendente baseado no tipo de receita")
+    public ResponseEntity <List<Receita>> listaReceitaPorTipo() {
+        var receitas = (List<Receita>) receitaService.listaReceitaPorTipo();
+        return ResponseEntity.ok(receitas);
     }
 
     @GetMapping("/total")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Mostra o saldo total das receitas")
     public String listaReceitaTotal() {
         return ("Receita total R$ " + receitaService.exibeReceitaTotal());
     }
 
 
+    @PutMapping("/{id}")
+    @ApiOperation(value = "Atualiza uma receita através de um ID informado")
+    public ResponseEntity<?> atualizaReceita(@PathVariable("id") Long id, @RequestBody Receita receita) {
+
+        try {
+            var receitaAtualizada = receitaService.atualizaReceita(id, receita);
+            return ResponseEntity.status(HttpStatus.OK).body(receitaAtualizada);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletaReceita(@PathVariable("id") Long id) {
-        receitaService.deletaReceita(id);
+    @ApiOperation(value = "Deleta uma receita através de um ID informado")
+    public ResponseEntity<?> deletaReceita(@PathVariable("id") Long id) {
+        try {
+            receitaService.deletaReceita(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 
 }

@@ -2,9 +2,11 @@ package com.publica.desafiopublica.services;
 
 import com.publica.desafiopublica.exceptions.EntidadeNaoEncontradaException;
 import com.publica.desafiopublica.models.Conta;
+import com.publica.desafiopublica.models.DadosTransferencia;
 import com.publica.desafiopublica.repository.ContaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +26,12 @@ public class ContaService {
     }
 
     public Conta listaContaPorId(long id) {
-        return contaRepository.findById(id);
 
+        var contaEncontrada= contaRepository.findById(id);
+        if(contaEncontrada == null) {
+            throw  new EntidadeNaoEncontradaException(String.format("Conta de código %d não encontrada.", id));
+        }
+        return contaEncontrada;
     }
 
     public Double exibeSaldoTotal() {
@@ -39,31 +45,29 @@ public class ContaService {
     }
 
     public void deletaConta(Long id) {
-        contaRepository.deleteById(id);
-    }
 
-
-    public Conta sacar(double valor, Conta contaOrigem) {
-        try{
-            if (contaOrigem.getSaldo() >= valor) {
-                var novoSaldoOrigem = contaOrigem.getSaldo() - valor;
-                contaOrigem.setSaldo(novoSaldoOrigem);
-            }
-        } catch (EntidadeNaoEncontradaException e){
-            // COMPLETAR CÓDIGO
+        try {
+            contaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(String.format("Conta de código %d não encontrada.", id));
         }
-        return contaOrigem;
+
     }
 
-    public void depositar(double valor, Conta contaDestino) {
-        var novoSaldoDestino = contaDestino.getSaldo() + valor;
-        contaDestino.setSaldo(novoSaldoDestino);
+    public String transferir(DadosTransferencia dadosTransferencia) {
+        var contaOrigem = contaRepository.findByNumeroConta(dadosTransferencia.getNumeroContaOrigem());
+        var contaDestino = contaRepository.findByNumeroConta(dadosTransferencia.getNumeroContaDestino());
+        if(contaOrigem.getSaldo() >= dadosTransferencia.getValorTransferencia()) {
+            contaOrigem.setSaldo(contaOrigem.getSaldo() - dadosTransferencia.getValorTransferencia());
+            atualizaConta(contaOrigem.getId(), contaOrigem);
+            contaDestino.setSaldo(contaDestino.getSaldo() + dadosTransferencia.getValorTransferencia());
+            atualizaConta(contaDestino.getId(), contaDestino);
+            return "Transação realizada com sucesso.";
+        } else {
+            return "Conta de origem não possuí saldo suficiente.";
+        }
+
     }
 
-    public Conta transferir(double valor, Conta contaDestino, Conta contaOrigem) {
-        sacar(valor, contaOrigem);
-        depositar(valor, contaDestino);
-        return contaDestino;
-    }
 
 }

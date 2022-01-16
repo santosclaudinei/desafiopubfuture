@@ -8,7 +8,9 @@ public interface ContaRepository extends CrudRepository<Conta, Long> {
 
     Conta findById(long id);
 
-    @Query(value = "SELECT sum(c.valor) FROM TB_CONTAS c ", nativeQuery = true)
+    Conta findByNumeroConta(String numeroConta);
+
+    @Query(value = "SELECT sum(C.saldo) FROM TB_CONTAS C ", nativeQuery = true)
     Double valorTotalContas();
 
 }
