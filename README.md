@@ -1,10 +1,11 @@
 <h1 align="center">Financr API</h1>
 
 ## Descrição do Projeto
+
 <p align="center">O projeto propõe uma solução de back-end utilizando a linguagem Java, Spring Boot, PostgresSQL e Docker visando auxiliar no controle de finanças pessoais.</p>
 
 
-### Features
+## Features
 
 #### Contas
 - [x] Cadastro de uma conta
@@ -31,13 +32,13 @@
 - [x] Deletar uma receita
 - [x] Listar saldo total entre todas as receitas
 
-### Pré-requisitos
+## Pré-requisitos
 
 Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
 [Git](https://git-scm.com), [Java JDK 11 no minimo](https://www.oracle.com/java/technologies/downloads/). 
 Além disto é bom ter um editor para trabalhar com o código como [Intellij](https://www.jetbrains.com/pt-br/idea/download/)
 
-### 🎲 Rodando o Back End (servidor)
+## 🎲 Rodando o Back End (servidor)
 
 ```bash
 # Clone este repositório
@@ -59,7 +60,7 @@ $ Executar o arquivo DesafioPublicaApplication.java
 - É possível usar o swagger-ui para realizar testes e verificar documentação <http://localhost:8080/swagger-ui/index.html>
 ```
 
-### 🛠 Tecnologias
+## 🛠 Tecnologias
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
@@ -72,9 +73,9 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 Não se aplica.
 
-### Autor
+## Autor
 
-<sub><b>Claudinei Santos</b></sub>
+<b>Claudinei Santos</b>
 
 Foi engrandecedor! Durante essas duas semanas precisei fazer uma imersão intensa o que me proporcionou um grande aprendizado, que fará grande diferença durante minha jornada profissional.
 
