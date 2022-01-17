@@ -76,7 +76,7 @@ Não se aplica.
 
 <sub><b>Claudinei Santos</b></sub>
 
-Foi uma experiênica engrandecedora, poís ao longo de duas semanas tive que estudar bastante e isso me proporcionou grande aprendizado que vou levar comigo como bagagem.
+Foi engrandecedor! Durante essas duas semanas precisei fazer uma imersão intensa o que me proporcionou um grande aprendizado, que fará grande diferença durante minha jornada profissional.
 
 [![Linkedin Badge](https://img.shields.io/badge/-Claudinei-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/claudinei-santos-ti/)](https://www.linkedin.com/in/claudinei-santos-ti/)
 [![Gmail Badge](https://img.shields.io/badge/-santos.devclaudinei@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:santos.devclaudinei@gmail.com)](mailto:santos.devclaudinei@gmail.com)
